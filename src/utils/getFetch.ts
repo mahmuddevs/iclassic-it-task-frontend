@@ -1,10 +1,12 @@
+import { backendUrl } from "./env";
 import { globalNavigate } from "./navigation";
 
-export type FetchOptions<TBody = unknown> = {
+export type FetchOptions<TBody = unknown, TFallback = unknown> = {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: TBody;
   private?: boolean;
   headers?: Record<string, string>;
+  fallback?: TFallback;
 };
 
 export type ApiError = {
@@ -12,8 +14,7 @@ export type ApiError = {
   status?: number;
 };
 
-
-const baseUrl = import.meta.env.VITE_API_BACKEND_URL as string;
+const baseUrl = backendUrl as string;
 
 let refreshPromise: Promise<void> | null = null;
 let isGuest = false;
@@ -34,9 +35,11 @@ const redirectToLogin = () => {
   const currentPath = window.location.pathname + window.location.search;
   const isLoginPage = window.location.pathname.startsWith("/auth");
 
-  globalNavigate("/auth/login", {
-    state: isLoginPage ? undefined : { from: currentPath },
-  });
+  if (!isLoginPage) {
+    globalNavigate("/auth/login", {
+      state: { from: currentPath },
+    });
+  }
 };
 
 /**
@@ -129,10 +132,10 @@ const executeTokenRefresh = async (): Promise<void> => {
 /**
  * High-performance fetch utility with integrated automatic token refresh.
  */
-export const getFetch = async <TResponse = unknown, TBody = unknown>(
+export const getFetch = async <TResponse = unknown, TBody = unknown, TFallback = TResponse>(
   endpoint: string,
-  options: FetchOptions<TBody> = {},
-): Promise<TResponse> => {
+  options: FetchOptions<TBody, TFallback> = {},
+): Promise<TResponse | TFallback> => {
   const {
     method = "GET",
     body,
@@ -195,6 +198,9 @@ export const getFetch = async <TResponse = unknown, TBody = unknown>(
 
     return await processResponse<TResponse>(response);
   } catch (error) {
+    if (options.fallback !== undefined) {
+      return options.fallback;
+    }
     if (error && (error as ApiError).status !== 401 && (error as ApiError).status !== 403) {
       console.error("Fetch error:", error);
     }

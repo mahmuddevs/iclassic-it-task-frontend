@@ -1,1 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import "tailwindcss";
+
+:root {
+  --foreground: #0f172a;
+  --background: #f8fafc;
+  --color-primary: #6366f1;
+  --color-secondary: #64748b;
+  --color-accent: #f59e0b;
+  --color-default-text: #334155;
+  --color-border: #e2e8f0;
+}
+
+.dark {
+  --foreground: #f8fafc;
+  --background: #0f172a;
+  --color-primary: #818cf8;
+  --color-secondary: #94a3b8;
+  --color-accent: #fbbf24;
+  --color-default-text: #cbd5e1;
+  --color-border: #1e293b;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-poppins: "Poppins", sans-serif;
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+  --color-default-text: var(--color-default-text);
+  --color-border: var(--color-border);
+}
+
+* {
+  @apply border-border;
+}
+
+body {
+  font-family: var(--font-poppins);
+  background-color: var(--background);
+  color: var(--color-default-text);
+}
+
+a,
+button {
+  @apply cursor-pointer;
+}

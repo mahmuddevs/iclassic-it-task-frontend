@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
 import Header from "../components/root/header";
 
-export default function Root() {
+export default function RootLayout() {
   return (
     <>
       <Header />
