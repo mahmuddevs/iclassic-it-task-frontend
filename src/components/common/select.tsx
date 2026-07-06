@@ -117,7 +117,7 @@ function Option({ value, children, selectedValue, onSelect }: OptionProps) {
       className={`w-full text-left px-4 h-12 text-sm transition-colors flex items-center justify-between cursor-pointer border-b border-border/40 last:border-b-0 ${
         isSelected
           ? "bg-primary/10 font-semibold text-primary hover:bg-primary/20"
-          : "text-foreground hover:bg-slate-100 dark:hover:bg-slate-800"
+          : "text-foreground hover:bg-hover"
       }`}
     >
       <span>{children}</span>

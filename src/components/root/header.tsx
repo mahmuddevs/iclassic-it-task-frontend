@@ -19,7 +19,7 @@ export default function Header({ onToggleCollapse, onToggleMobile }: HeaderProps
         {/* Toggle Sidebar Button for Mobile */}
         <button
           onClick={onToggleMobile}
-          className="p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-secondary hover:text-foreground md:hidden cursor-pointer border-none bg-transparent"
+          className="p-2 -ml-2 rounded-lg hover:bg-hover text-secondary hover:text-foreground md:hidden cursor-pointer border-none bg-transparent"
         >
           <ListIcon size={22} />
         </button>
@@ -27,7 +27,7 @@ export default function Header({ onToggleCollapse, onToggleMobile }: HeaderProps
         {/* Toggle Sidebar Button for Desktop */}
         <button
           onClick={onToggleCollapse}
-          className="hidden md:flex p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-secondary hover:text-foreground cursor-pointer border-none bg-transparent"
+          className="hidden md:flex p-2 -ml-2 rounded-lg hover:bg-hover text-secondary hover:text-foreground cursor-pointer border-none bg-transparent"
         >
           <ListIcon size={22} />
         </button>
@@ -37,7 +37,7 @@ export default function Header({ onToggleCollapse, onToggleMobile }: HeaderProps
         {/* Theme Toggle Button */}
         <button
           onClick={() => dispatch(toggleTheme())}
-          className="p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-secondary hover:text-foreground cursor-pointer border-none bg-transparent"
+          className="p-2.5 rounded-lg hover:bg-hover text-secondary hover:text-foreground cursor-pointer border-none bg-transparent"
           title={`Switch to ${activeTheme === "dark" ? "light" : "dark"} theme`}
         >
           {activeTheme === "dark" ? <SunIcon size={20} /> : <MoonIcon size={20} />}

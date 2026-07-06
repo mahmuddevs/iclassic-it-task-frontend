@@ -78,7 +78,7 @@ export default function ImageUpload({
         onClick={triggerUpload}
         className={`relative flex flex-col items-center justify-center w-full h-48 rounded-lg border border-dashed transition-all cursor-pointer overflow-hidden mt-auto ${
           previewUrl
-            ? "border-border bg-background-card hover:bg-slate-100/50 dark:hover:bg-slate-800/20"
+            ? "border-border bg-background-card hover:bg-hover"
             : "border-border bg-background-input hover:border-primary hover:bg-primary/5"
         } ${errorMessage ? "border-red-500" : ""}`}
       >

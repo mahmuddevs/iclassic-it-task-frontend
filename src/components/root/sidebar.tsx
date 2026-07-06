@@ -46,7 +46,7 @@ export default function Sidebar({ isCollapsed, isMobileOpen, onCloseMobile }: Si
         {isMobileOpen && (
           <button
             onClick={onCloseMobile}
-            className="p-2 -mr-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-secondary hover:text-foreground md:hidden cursor-pointer border-none bg-transparent"
+            className="p-2 -mr-2 rounded-lg hover:bg-hover text-secondary hover:text-foreground md:hidden cursor-pointer border-none bg-transparent"
           >
             <XIcon size={22} />
           </button>
@@ -69,7 +69,7 @@ export default function Sidebar({ isCollapsed, isMobileOpen, onCloseMobile }: Si
                   : "justify-center px-0"
               } ${isActive
                 ? "bg-primary/10 text-primary font-semibold"
-                : "text-secondary hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-800"
+                : "text-secondary hover:text-foreground hover:bg-hover"
               }`}
             >
               <Icon size={22} className="shrink-0" />

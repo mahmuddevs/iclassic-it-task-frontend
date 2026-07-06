@@ -157,42 +157,45 @@ export const getFetch = async <TResponse = unknown, TBody = unknown, TFallback =
 
     // 401 Unauthorized - Access Token might be expired
     if (response.status === 401) {
-      if (isAuthEndpoint(endpoint)) {
-        redirectToLogin();
-        throw {
-          message: "Unauthorized access",
-          status: response.status,
-        } as ApiError;
-      }
-      // If the user is a guest, skip the refresh-access-token entirely and redirect
-      if (isGuest) {
-        redirectToLogin();
-        throw {
-          message: "No active session. Please login.",
-        } as ApiError;
-      }
-
-      try {
-        await executeTokenRefresh();
-
-        // Retry the original request
-        const retryResponse = await makeRequest(endpoint, method, headers, isPrivate, body);
-
-        if (retryResponse.status === 401 || retryResponse.status === 403) {
+      const isLogin = endpoint.includes("/auth/login")
+      if (!isLogin) {
+        if (isAuthEndpoint(endpoint)) {
           redirectToLogin();
           throw {
             message: "Unauthorized access",
-            status: retryResponse.status,
+            status: response.status,
+          } as ApiError;
+        }
+        // If the user is a guest, skip the refresh-access-token entirely and redirect
+        if (isGuest) {
+          redirectToLogin();
+          throw {
+            message: "No active session. Please login.",
           } as ApiError;
         }
 
-        return await processResponse<TResponse>(retryResponse);
-      } catch {
-        redirectToLogin();
-        throw {
-          message: "Session expired. Please login again.",
-          status: 401,
-        } as ApiError;
+        try {
+          await executeTokenRefresh();
+
+          // Retry the original request
+          const retryResponse = await makeRequest(endpoint, method, headers, isPrivate, body);
+
+          if (retryResponse.status === 401 || retryResponse.status === 403) {
+            redirectToLogin();
+            throw {
+              message: "Unauthorized access",
+              status: retryResponse.status,
+            } as ApiError;
+          }
+
+          return await processResponse<TResponse>(retryResponse);
+        } catch {
+          redirectToLogin();
+          throw {
+            message: "Session expired. Please login again.",
+            status: 401,
+          } as ApiError;
+        }
       }
     }
 

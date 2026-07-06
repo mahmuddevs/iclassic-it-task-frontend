@@ -122,19 +122,6 @@ export default function Login() {
             )}
           </div>
 
-          {/* Remember Me */}
-          <div className="flex items-center">
-            <input
-              id="remember-me"
-              name="remember-me"
-              type="checkbox"
-              className="h-4 w-4 text-primary focus:ring-primary border-border rounded cursor-pointer"
-            />
-            <label htmlFor="remember-me" className="ml-2 block text-xs font-semibold text-secondary select-none cursor-pointer">
-              Remember me on this device
-            </label>
-          </div>
-
           {/* Submit */}
           <button
             type="submit"

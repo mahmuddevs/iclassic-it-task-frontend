@@ -1,4 +1,4 @@
-import { useState, useEffect, type ImgHTMLAttributes, type SyntheticEvent } from "react"
+import { useState, type ImgHTMLAttributes, type SyntheticEvent } from "react"
 import placeholderImg from "../../assets/placeholder.png"
 
 interface ImageLoaderProps extends ImgHTMLAttributes<HTMLImageElement> {
@@ -20,22 +20,14 @@ export default function ImageLoader({
   const [error, setError] = useState(!src)
   const [loading, setLoading] = useState(!!src)
 
-  // Reset states dynamically if src prop changes
-  useEffect(() => {
-    const resetStates = () => {
-      if (!src) {
-        setCurrentSrc(fallbackSrc)
-        setError(true)
-        setLoading(false)
-      } else {
-        setCurrentSrc(src)
-        setError(false)
-        setLoading(true)
-      }
-    }
-
-    resetStates()
-  }, [src, fallbackSrc])
+  // Adjust state during render when src prop changes to avoid useEffect race conditions
+  const [prevSrc, setPrevSrc] = useState<string | undefined>(src)
+  if (src !== prevSrc) {
+    setPrevSrc(src)
+    setCurrentSrc(src || fallbackSrc)
+    setError(!src)
+    setLoading(!!src)
+  }
 
   const handleLoad = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     setLoading(false)
@@ -50,7 +42,7 @@ export default function ImageLoader({
   }
 
   return (
-    <div className={`relative overflow-hidden ${wrapperClass}`}>
+    <div className={`relative overflow-hidden w-full h-full ${wrapperClass}`}>
       {/* Loading Skeleton */}
       {loading && !error && (
         <div className="absolute inset-0 bg-slate-200 dark:bg-slate-800/60 animate-pulse rounded-[inherit] flex items-center justify-center">

@@ -67,7 +67,7 @@ export default function Pagination({
         type="button"
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
-        className="flex items-center justify-center w-9 h-9 rounded-lg border border-border bg-background-card text-foreground hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-background-card disabled:cursor-not-allowed transition-all cursor-pointer"
+        className="flex items-center justify-center w-9 h-9 rounded-lg border border-border bg-background-card text-foreground hover:bg-hover disabled:opacity-40 disabled:hover:bg-background-card disabled:cursor-not-allowed transition-all cursor-pointer"
         aria-label="Go to previous page"
       >
         <CaretLeft size={16} weight="bold" />
@@ -96,7 +96,7 @@ export default function Pagination({
             className={`flex items-center justify-center w-9 h-9 text-sm font-semibold rounded-lg transition-all cursor-pointer ${
               isCurrent
                 ? "bg-primary text-white border border-primary font-bold shadow-sm"
-                : "border border-border bg-background-card text-foreground hover:bg-slate-100 dark:hover:bg-slate-800"
+                : "border border-border bg-background-card text-foreground hover:bg-hover"
             }`}
             aria-current={isCurrent ? "page" : undefined}
             aria-label={`Go to page ${page}`}
@@ -111,7 +111,7 @@ export default function Pagination({
         type="button"
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
-        className="flex items-center justify-center w-9 h-9 rounded-lg border border-border bg-background-card text-foreground hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-background-card disabled:cursor-not-allowed transition-all cursor-pointer"
+        className="flex items-center justify-center w-9 h-9 rounded-lg border border-border bg-background-card text-foreground hover:bg-hover disabled:opacity-40 disabled:hover:bg-background-card disabled:cursor-not-allowed transition-all cursor-pointer"
         aria-label="Go to next page"
       >
         <CaretRight size={16} weight="bold" />

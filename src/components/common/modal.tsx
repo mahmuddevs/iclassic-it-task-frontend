@@ -77,7 +77,7 @@ export function ModalHeader({
         <button
           onClick={onClose}
           type="button"
-          className="text-secondary hover:text-foreground p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer focus:outline-none border-none bg-transparent"
+          className="text-secondary hover:text-foreground p-1 rounded-md hover:bg-hover transition-all cursor-pointer focus:outline-none border-none bg-transparent"
         >
           <X size={18} weight="bold" />
         </button>

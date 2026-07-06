@@ -55,7 +55,7 @@ export default function Avatar() {
       {/* Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center p-0.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer select-none border-none bg-transparent shrink-0"
+        className="flex items-center justify-center p-0.5 rounded-full hover:bg-hover transition-colors cursor-pointer select-none border-none bg-transparent shrink-0"
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
@@ -84,7 +84,7 @@ export default function Avatar() {
           <Link
             to="/"
             onClick={() => setIsOpen(false)}
-            className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-secondary hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary transition-colors whitespace-nowrap"
+            className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-secondary hover:bg-hover hover:text-primary transition-colors whitespace-nowrap"
           >
             <HouseIcon size={16} className="shrink-0" />
             <span>Go to Site</span>
@@ -93,7 +93,7 @@ export default function Avatar() {
           <Link
             to="/dashboard/profile-settings"
             onClick={() => setIsOpen(false)}
-            className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-secondary hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary transition-colors whitespace-nowrap"
+            className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-secondary hover:bg-hover hover:text-primary transition-colors whitespace-nowrap"
           >
             <GearIcon size={16} className="shrink-0" />
             <span>Profile Settings</span>

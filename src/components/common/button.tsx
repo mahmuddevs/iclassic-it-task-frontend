@@ -52,7 +52,7 @@ export default function Button(props: ButtonProps) {
     hasCustomBorder ? "" : "border-border"
   } ${
     hasCustomText ? "" : "text-foreground"
-  } hover:bg-slate-100 dark:hover:bg-slate-800`;
+  } hover:bg-hover`;
 
   const typeStyles = type === "primary" ? primaryStyles : secondaryStyles;
   const combinedClasses = `${displayStyle} ${baseStyles} ${typeStyles} ${className}`.trim();

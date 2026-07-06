@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
 
   --foreground: #0f172a;
   --background: #f8fafc;
@@ -13,10 +13,12 @@
   --color-accent: #f59e0b;
   --color-default-text: #334155;
   --color-border: #e2e8f0;
+  --color-hover: rgba(99, 102, 241, 0.05);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
+    color-scheme: dark;
     --foreground: #f8fafc;
     --background: #0f172a;
     --background-card: #0f172a;
@@ -26,10 +28,12 @@
     --color-accent: #fbbf24;
     --color-default-text: #cbd5e1;
     --color-border: #1e293b;
+    --color-hover: rgba(129, 140, 248, 0.1);
   }
 }
 
 .dark {
+  color-scheme: dark;
   --foreground: #f8fafc;
   --background: #0f172a;
   --background-card: #0f172a;
@@ -39,6 +43,7 @@
   --color-accent: #fbbf24;
   --color-default-text: #cbd5e1;
   --color-border: #1e293b;
+  --color-hover: rgba(129, 140, 248, 0.1);
 }
 
 @theme inline {
@@ -52,6 +57,7 @@
   --color-accent: var(--color-accent);
   --color-default-text: var(--color-default-text);
   --color-border: var(--color-border);
+  --color-hover: var(--color-hover);
 
   /* Custom breakpoints */
   --breakpoint-xs: 31.875rem; /* 510px */
