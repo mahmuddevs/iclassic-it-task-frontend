@@ -5,6 +5,7 @@ import AuthLayout from "../layouts/auth";
 import Login from "../pages/auth/login";
 import Register from "../pages/auth/register";
 import AppInitializer from "../components/common/app-initializer";
+import ProtectedRoute from "../routes/protected-route";
 
 const router = createBrowserRouter([
   {
@@ -13,11 +14,17 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <RootLayout />,
+        element: <ProtectedRoute />,
         children: [
           {
-            index: true,
-            element: <Home />,
+            path: "",
+            element: <RootLayout />,
+            children: [
+              {
+                index: true,
+                element: <Home />,
+              },
+            ],
           },
         ],
       },
@@ -34,7 +41,7 @@ const router = createBrowserRouter([
             element: <Login />,
           },
           {
-            path: "signup",
+            path: "register",
             element: <Register />,
           },
         ],

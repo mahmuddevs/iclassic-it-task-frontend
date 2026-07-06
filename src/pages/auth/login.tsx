@@ -56,7 +56,7 @@ export default function Login() {
   return (
     <div className="min-h-dvh flex items-center justify-center bg-background px-4 py-12 select-none">
       {/* Login Card */}
-      <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-border rounded-3xl shadow-xl p-8 md:p-10 transition-all duration-300">
+      <div className="w-full max-w-md bg-background-card border border-border rounded-3xl shadow-xl p-5 sm:p-8  transition-all duration-300">
 
         {/* Brand/Header */}
         <div className="flex flex-col items-center mb-8">
@@ -80,7 +80,7 @@ export default function Login() {
                 type="email"
                 placeholder="name@company.com"
                 {...register("email")}
-                className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl text-sm transition-all focus:outline-none text-foreground placeholder:text-slate-400"
+                className="w-full pl-11 pr-4 py-3 bg-background-input border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl text-sm transition-all focus:outline-none text-foreground placeholder:text-slate-400"
               />
             </div>
             {errors.email && (
@@ -104,7 +104,7 @@ export default function Login() {
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 {...register("password")}
-                className="w-full pl-11 pr-12 py-3 bg-white dark:bg-slate-800 border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl text-sm transition-all focus:outline-none text-foreground placeholder:text-slate-400"
+                className="w-full pl-11 pr-12 py-3 bg-background-input border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl text-sm transition-all focus:outline-none text-foreground placeholder:text-slate-400"
               />
               <button
                 type="button"
@@ -152,7 +152,7 @@ export default function Login() {
         {/* Register Footer */}
         <p className="mt-8 text-center text-xs font-semibold text-secondary">
           Don't have an account?{" "}
-          <Link to="/auth/signup" className="text-primary hover:text-primary/80 transition-colors">
+          <Link to="/auth/register" className="text-primary hover:text-primary/80 transition-colors">
             Sign up now
           </Link>
         </p>

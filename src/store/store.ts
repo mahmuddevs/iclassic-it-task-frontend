@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import authReducer, { setUser } from './slices/auth-slice'
+import themeReducer from './slices/theme-slice'
 import { setIsGuest, setSessionExpiredCallback } from '../utils/getFetch'
 
 const makeStore = () => {
   return configureStore({
     reducer: {
       auth: authReducer,
+      theme: themeReducer,
     },
   })
 }

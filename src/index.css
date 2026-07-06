@@ -2,8 +2,12 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: light dark;
+
   --foreground: #0f172a;
   --background: #f8fafc;
+  --background-card: #ffffff;
+  --background-input: #ffffff;
   --color-primary: #6366f1;
   --color-secondary: #64748b;
   --color-accent: #f59e0b;
@@ -11,9 +15,25 @@
   --color-border: #e2e8f0;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --foreground: #f8fafc;
+    --background: #0f172a;
+    --background-card: #0f172a;
+    --background-input: #1e293b;
+    --color-primary: #818cf8;
+    --color-secondary: #94a3b8;
+    --color-accent: #fbbf24;
+    --color-default-text: #cbd5e1;
+    --color-border: #1e293b;
+  }
+}
+
 .dark {
   --foreground: #f8fafc;
   --background: #0f172a;
+  --background-card: #0f172a;
+  --background-input: #1e293b;
   --color-primary: #818cf8;
   --color-secondary: #94a3b8;
   --color-accent: #fbbf24;
@@ -21,17 +41,21 @@
   --color-border: #1e293b;
 }
 
-@custom-variant dark (&:is(.dark *));
-
 @theme inline {
   --font-poppins: "Poppins", sans-serif;
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+  --color-background-card: var(--background-card);
+  --color-background-input: var(--background-input);
   --color-primary: var(--color-primary);
   --color-secondary: var(--color-secondary);
   --color-accent: var(--color-accent);
   --color-default-text: var(--color-default-text);
   --color-border: var(--color-border);
+
+  /* Custom breakpoints */
+  --breakpoint-xs: 31.875rem; /* 510px */
+  --breakpoint-2xs: 26.25rem; /* 420px */
 }
 
 * {
