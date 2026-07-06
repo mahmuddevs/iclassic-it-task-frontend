@@ -27,6 +27,7 @@ export default function Login() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<LoginInput>({
     resolver: zodResolver(LoginSchema),
@@ -35,6 +36,11 @@ export default function Login() {
       password: "",
     },
   })
+
+  const populateForm = (email: string, password: string) => {
+    setValue("email", email, { shouldValidate: true })
+    setValue("password", password, { shouldValidate: true })
+  }
 
   const onSubmit = async (data: LoginInput) => {
     return getFetch<{ message?: string; data: { user: User } }>("/auth/login", {
@@ -126,15 +132,51 @@ export default function Login() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full flex items-center justify-center py-3 px-4 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 transition-all select-none"
+            className="w-full flex items-center justify-center py-3 px-4 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 transition-all hover:shadow-md hover:shadow-primary/10 active:scale-98 select-none duration-150"
           >
             {isSubmitting ? (
-              <CircleNotchIcon size={20} className="animate-spin text-white" />
+              <span className="flex items-center justify-center gap-2">
+                <CircleNotchIcon size={18} className="animate-spin text-white" />
+                <span>Signing In...</span>
+              </span>
             ) : (
               "Sign In"
             )}
           </button>
         </form>
+
+        {/* Quick Demo Credentials */}
+        <div className="mt-8 pt-6 border-t border-border space-y-3">
+          <p className="text-[11px] font-bold text-secondary uppercase tracking-wider text-center">
+            Quick demo login
+          </p>
+          <div className="grid grid-cols-3 gap-2.5">
+            <button
+              type="button"
+              onClick={() => populateForm("admin@example.com", "password123")}
+              className="flex flex-col items-center gap-1 p-2.5 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary hover:border-primary text-primary hover:text-white transition-all hover:scale-105 active:scale-95 duration-200 cursor-pointer"
+            >
+              <span className="text-xs font-bold">Admin</span>
+              <span className="text-[9px] opacity-75 font-medium text-center leading-tight">Full Access</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => populateForm("manager@example.com", "password123")}
+              className="flex flex-col items-center gap-1 p-2.5 rounded-xl border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500 hover:border-amber-500 text-amber-600 dark:text-amber-400 hover:text-white transition-all hover:scale-105 active:scale-95 duration-200 cursor-pointer"
+            >
+              <span className="text-xs font-bold">Manager</span>
+              <span className="text-[9px] opacity-75 font-medium text-center leading-tight">Staff & Stock</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => populateForm("employee@example.com", "password123")}
+              className="flex flex-col items-center gap-1 p-2.5 rounded-xl border border-secondary/20 bg-secondary/5 hover:bg-secondary hover:border-secondary text-secondary hover:text-white transition-all hover:scale-105 active:scale-95 duration-200 cursor-pointer"
+            >
+              <span className="text-xs font-bold">Employee</span>
+              <span className="text-[9px] opacity-75 font-medium text-center leading-tight">Basic View</span>
+            </button>
+          </div>
+        </div>
 
         {/* Register Footer */}
         <p className="mt-8 text-center text-xs font-semibold text-secondary">

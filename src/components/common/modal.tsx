@@ -41,12 +41,12 @@ export default function Modal({ isOpen, onClose, children, className = "" }: Mod
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs transition-opacity duration-300"
+        className="fixed inset-0 bg-slate-950/35 backdrop-blur-md transition-opacity duration-300"
         onClick={onClose}
       />
       {/* Container */}
       <div
-        className={`relative w-full max-w-lg bg-background-card rounded-xl shadow-lg border border-border overflow-hidden z-10 flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200 ${className}`}
+        className={`relative w-full max-w-lg bg-background-card rounded-2xl shadow-xl border border-border overflow-hidden z-10 flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200 ${className}`}
       >
         {children}
       </div>
@@ -70,7 +70,7 @@ export function ModalHeader({
 }: HeaderProps) {
   return (
     <div
-      className={`flex items-center justify-between px-6 py-4 border-b border-border bg-slate-50/50 dark:bg-slate-900/20 shrink-0 ${className}`}
+      className={`flex items-center justify-between px-6 pt-6 pb-2 shrink-0 bg-transparent ${className}`}
     >
       <h6 className="text-base font-bold text-foreground">{title}</h6>
       {showCloseButton && onClose && (
@@ -95,7 +95,7 @@ interface BodyProps {
 export function ModalBody({ children, className = "" }: BodyProps) {
   return (
     <div
-      className={`max-xs:px-2 p-6 overflow-y-auto flex-1 text-sm text-foreground/80 leading-relaxed ${className}`}
+      className={`max-xs:px-2 px-6 py-4 overflow-y-auto flex-1 text-sm text-foreground/80 leading-relaxed bg-transparent ${className}`}
     >
       {children}
     </div>
@@ -111,7 +111,7 @@ interface FooterProps {
 export function ModalFooter({ children, className = "" }: FooterProps) {
   return (
     <div
-      className={`px-6 py-4 border-t border-border bg-slate-50/50 dark:bg-slate-900/20 flex items-center justify-end gap-3 shrink-0 ${className}`}
+      className={`px-6 pb-6 pt-2 flex items-center justify-end gap-3 shrink-0 bg-transparent ${className}`}
     >
       {children}
     </div>

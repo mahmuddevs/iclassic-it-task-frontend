@@ -45,7 +45,7 @@ export default function Button(props: ButtonProps) {
   const hasCustomBg = className.split(" ").some(c => c.startsWith("bg-"));
 
   const primaryStyles = `text-white ${hasCustomBg ? "" : "bg-primary hover:bg-primary/90"} ${
-    hasCustomBorder ? "" : "border-primary"
+    hasCustomBorder ? "" : "border-transparent"
   }`;
 
   const secondaryStyles = `bg-transparent ${

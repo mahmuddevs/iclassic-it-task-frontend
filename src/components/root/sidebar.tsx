@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router"
 import { HouseIcon, PackageIcon, ReceiptIcon, UsersIcon, GearIcon, ChartBarIcon, XIcon } from "@phosphor-icons/react"
+import { useAppSelector } from "../../store/store"
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -7,17 +8,26 @@ interface SidebarProps {
   onCloseMobile: () => void;
 }
 
+const ALL_MENU_ITEMS = [
+  { name: "Dashboard", path: "/", icon: HouseIcon, permission: null },
+  { name: "Products", path: "/products", icon: PackageIcon, permission: "products.read" },
+  { name: "Orders", path: "/orders", icon: ReceiptIcon, permission: "orders.read" },
+  { name: "Customers", path: "/customers", icon: UsersIcon, permission: "users.read" },
+  { name: "Reports", path: "/reports", icon: ChartBarIcon, permission: "reports.read" },
+  { name: "Settings", path: "/dashboard/profile-settings", icon: GearIcon, permission: null },
+]
+
 export default function Sidebar({ isCollapsed, isMobileOpen, onCloseMobile }: SidebarProps) {
   const location = useLocation()
+  const user = useAppSelector((state) => state.auth.user)
 
-  const menuItems = [
-    { name: "Dashboard", path: "/", icon: HouseIcon },
-    { name: "Products", path: "/products", icon: PackageIcon },
-    { name: "Orders", path: "/orders", icon: ReceiptIcon },
-    { name: "Customers", path: "/customers", icon: UsersIcon },
-    { name: "Reports", path: "/reports", icon: ChartBarIcon },
-    { name: "Settings", path: "/dashboard/profile-settings", icon: GearIcon },
-  ]
+  const userPermissionNames = user?.permissions?.map((p) => p.name) ?? []
+
+  const menuItems = ALL_MENU_ITEMS.filter((item) => {
+    // Items with no required permission are always visible (Dashboard, Settings)
+    if (!item.permission) return true
+    return userPermissionNames.includes(item.permission)
+  })
 
   const isSidebarExpanded = !isCollapsed || isMobileOpen
 

@@ -1,21 +1,11 @@
 import { useState } from "react"
-import { Outlet, useLocation } from "react-router"
+import { Outlet } from "react-router"
 import Header from "../components/root/header"
 import Sidebar from "../components/root/sidebar"
 
 export default function RootLayout() {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
-  const location = useLocation()
-
-  const getPageTitle = (pathname: string) => {
-    if (pathname === "/") return "Dashboard"
-    const segments = pathname.split("/").filter(Boolean)
-    const lastSegment = segments[segments.length - 1] || ""
-    return lastSegment
-      .replace(/[-_]/g, " ")
-      .replace(/\b\w/g, (char) => char.toUpperCase())
-  }
 
   return (
     <div className="min-h-dvh flex bg-background text-foreground transition-colors duration-300">
@@ -42,9 +32,6 @@ export default function RootLayout() {
           onToggleMobile={() => setIsMobileOpen(!isMobileOpen)}
         />
         <main className="flex-1 p-4 md:p-6 overflow-y-auto">
-          <h1 className="text-xl md:text-2xl font-bold text-foreground mb-6 select-none tracking-tight">
-            {getPageTitle(location.pathname)}
-          </h1>
           <Outlet />
         </main>
       </div>

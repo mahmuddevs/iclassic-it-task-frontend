@@ -1,11 +1,20 @@
+import { useState } from "react"
 import { useQueryState, parseAsInteger } from "nuqs"
 import { useGetQuery } from "../../hooks/useGetQuery"
+import { useQueryMutation } from "../../hooks/useQueryMutation"
 import Table from "../../components/common/table"
 import ImageLoader from "../../components/common/image-loader"
 import Pagination from "../../components/common/pagination"
 import NoData from "../../components/common/no-data"
+import Modal from "../../components/common/modal"
+import Button from "../../components/common/button"
 import { getAssetUrl } from "../../utils/getAssetUrl"
 import { EyeIcon, PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react"
+import { toast } from "sonner"
+import PageHeading from "../../components/root/page-heading"
+import AddProduct from "../../components/root/add-product"
+import UpdateProduct from "../../components/root/update-product"
+import ViewProduct from "../../components/root/view-product"
 
 interface ProductItem {
   _id: string;
@@ -30,16 +39,63 @@ interface GetProductsResponse {
 
 export default function Products() {
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1))
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [productToDelete, setProductToDelete] = useState<ProductItem | null>(null)
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
+  const [productToUpdate, setProductToUpdate] = useState<ProductItem | null>(null)
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false)
+  const [productToView, setProductToView] = useState<ProductItem | null>(null)
 
-  const { data, isLoading } = useGetQuery<GetProductsResponse>({
+  const { data, isLoading, refetch } = useGetQuery<GetProductsResponse>({
     url: "/products",
     isPrivate: true,
     queryParams: {
       page,
-      limit: 8, // Small limit to demonstrate pagination controls
+      limit: 8,
     },
     keys: [page],
   })
+
+  const { mutate: deleteProduct, isPending: isDeleting } = useQueryMutation<
+    { message?: string },
+    Error,
+    string
+  >({
+    url: (id) => `/products/${id}`,
+    method: "DELETE",
+    isPrivate: true,
+    mutationOptions: {
+      onSuccess: (resData) => {
+        toast.success(resData?.message || "Product deleted successfully.")
+        const currentProductsCount = data?.products?.length || 0
+        if (currentProductsCount === 1 && page > 1) {
+          setPage(page - 1)
+        }
+        refetch()
+        setIsDeleteModalOpen(false)
+        setProductToDelete(null)
+      },
+      onError: (error) => {
+        toast.error(error.message || "Failed to delete product.")
+      },
+    },
+  })
+
+  const handleConfirmDelete = () => {
+    if (productToDelete) {
+      deleteProduct(productToDelete._id)
+    }
+  }
+
+  const handleCloseDeleteModal = () => {
+    if (isDeleting) return
+    setIsDeleteModalOpen(false)
+    setProductToDelete(null)
+  }
+
+
+
 
   if (isLoading) {
     return (
@@ -64,6 +120,13 @@ export default function Products() {
 
   return (
     <div className="space-y-6">
+      <div className="flex flex-wrap justify-between items-center gap-4">
+        <PageHeading />
+        <Button onClick={() => setIsAddModalOpen(true)} className="border-primary!">
+          Add Product
+        </Button>
+
+      </div>
       {/* Products Table */}
       <Table>
         <Table.Header>
@@ -122,6 +185,10 @@ export default function Products() {
                 <div className="flex items-center justify-center gap-2">
                   <button
                     type="button"
+                    onClick={() => {
+                      setProductToView(product)
+                      setIsViewModalOpen(true)
+                    }}
                     className="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-hover transition-colors cursor-pointer border-none bg-transparent"
                     title="View details"
                   >
@@ -129,6 +196,10 @@ export default function Products() {
                   </button>
                   <button
                     type="button"
+                    onClick={() => {
+                      setProductToUpdate(product)
+                      setIsUpdateModalOpen(true)
+                    }}
                     className="p-1.5 rounded-lg text-secondary hover:text-green-600 hover:bg-hover transition-colors cursor-pointer border-none bg-transparent"
                     title="Edit product"
                   >
@@ -136,6 +207,10 @@ export default function Products() {
                   </button>
                   <button
                     type="button"
+                    onClick={() => {
+                      setProductToDelete(product)
+                      setIsDeleteModalOpen(true)
+                    }}
                     className="p-1.5 rounded-lg text-secondary hover:text-red-600 hover:bg-hover transition-colors cursor-pointer border-none bg-transparent"
                     title="Delete product"
                   >
@@ -158,6 +233,82 @@ export default function Products() {
           />
         </div>
       )}
+      {/* Add Product Modal */}
+      <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} className="max-w-2xl">
+        <AddProduct
+          onSuccess={() => {
+            setIsAddModalOpen(false)
+            refetch()
+          }}
+          onCancel={() => setIsAddModalOpen(false)}
+        />
+      </Modal>
+
+      {/* Update Product Modal */}
+      <Modal isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)} className="max-w-2xl">
+        {productToUpdate && (
+          <UpdateProduct
+            product={productToUpdate}
+            onSuccess={() => {
+              setIsUpdateModalOpen(false)
+              setProductToUpdate(null)
+              refetch()
+            }}
+            onCancel={() => {
+              setIsUpdateModalOpen(false)
+              setProductToUpdate(null)
+            }}
+          />
+        )}
+      </Modal>
+
+      {/* View Product Modal */}
+      <Modal isOpen={isViewModalOpen} onClose={() => setIsViewModalOpen(false)} className="max-w-2xl">
+        {productToView && (
+          <ViewProduct
+            product={productToView}
+            onClose={() => {
+              setIsViewModalOpen(false)
+              setProductToView(null)
+            }}
+          />
+        )}
+      </Modal>
+
+      {/* Delete confirmation modal */}
+      <Modal isOpen={isDeleteModalOpen} onClose={handleCloseDeleteModal}>
+        <Modal.Header title="Confirm Delete" onClose={handleCloseDeleteModal} />
+        <Modal.Body>
+          <div className="space-y-3">
+            <p className="text-foreground">
+              Are you sure you want to delete <strong className="font-semibold text-foreground">{productToDelete?.name}</strong>?
+            </p>
+            <p className="text-xs text-red-500 font-medium">
+              This action cannot be undone. This product will be permanently removed from the catalog.
+            </p>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            type="secondary"
+            onClick={handleCloseDeleteModal}
+            disabled={isDeleting}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="primary"
+            onClick={handleConfirmDelete}
+            className="bg-red-600 hover:bg-red-700 border-red-600!"
+            disabled={isDeleting}
+          >
+            {isDeleting ? "Deleting..." : "Delete"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+
     </div>
   )
 }

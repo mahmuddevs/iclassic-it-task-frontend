@@ -146,12 +146,12 @@ export const getFetch = async <TResponse = unknown, TBody = unknown, TFallback =
   try {
     const response = await makeRequest(endpoint, method, headers, isPrivate, body);
 
-    // 403 Forbidden - Not allowed, redirect directly
+    // 403 Forbidden - User is authenticated but lacks permission, do NOT log out
     if (response.status === 403) {
-      redirectToLogin();
+      const data = await readResponseBody<{ message?: string }>(response);
       throw {
-        message: "Unauthorized access",
-        status: response.status,
+        message: data?.message || "You do not have permission to perform this action.",
+        status: 403,
       } as ApiError;
     }
 
@@ -166,6 +166,20 @@ export const getFetch = async <TResponse = unknown, TBody = unknown, TFallback =
             status: response.status,
           } as ApiError;
         }
+
+        // Read body to distinguish expired vs forged/invalid token
+        const responseBody = await readResponseBody<{ message?: string; data?: { code?: string } }>(response);
+        const isInvalidToken = responseBody?.data?.code === "TOKEN_INVALID";
+
+        // Forged or malformed token — skip refresh, redirect immediately
+        if (isInvalidToken) {
+          redirectToLogin();
+          throw {
+            message: responseBody?.message || "Invalid token. Please log in again.",
+            status: 401,
+          } as ApiError;
+        }
+
         // If the user is a guest, skip the refresh-access-token entirely and redirect
         if (isGuest) {
           redirectToLogin();
@@ -180,7 +194,7 @@ export const getFetch = async <TResponse = unknown, TBody = unknown, TFallback =
           // Retry the original request
           const retryResponse = await makeRequest(endpoint, method, headers, isPrivate, body);
 
-          if (retryResponse.status === 401 || retryResponse.status === 403) {
+          if (retryResponse.status === 401) {
             redirectToLogin();
             throw {
               message: "Unauthorized access",
