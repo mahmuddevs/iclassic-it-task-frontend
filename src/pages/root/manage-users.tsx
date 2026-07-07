@@ -272,7 +272,7 @@ export default function ManageUsers() {
               onClick={() => {
                 if (userToUpdateRole) {
                   if (selectedRole === userToUpdateRole.role) {
-                    toast.error(`No changes detected. The user is already assigned the ${selectedRole} role.`)
+                    toast.info(`No changes detected.`)
                     return
                   }
                   performUpdateRole({ id: userToUpdateRole._id, role: selectedRole })

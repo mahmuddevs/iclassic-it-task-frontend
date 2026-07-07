@@ -44,6 +44,7 @@ export default function UpdateProduct({ product, onSuccess, onCancel }: UpdatePr
       purchasePrice: product.purchasePrice,
       sellingPrice: product.sellingPrice,
       stockQuantity: product.stockQuantity,
+      image: product.image ? getAssetUrl(product.image) : undefined,
     },
   })
 
@@ -68,7 +69,7 @@ export default function UpdateProduct({ product, onSuccess, onCancel }: UpdatePr
 
   const onSubmit: SubmitHandler<UpdateProductInput> = (values) => {
     if (!isDirty) {
-      toast.error("No changes detected. The product details are already up-to-date.")
+      toast.info("No changes detected.")
       return
     }
     const formData = new FormData()
@@ -87,7 +88,7 @@ export default function UpdateProduct({ product, onSuccess, onCancel }: UpdatePr
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col flex-1 overflow-hidden">
       <Modal.Header title="Update Product" onClose={onCancel} />
-      
+
       <Modal.Body className="overflow-y-auto py-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Name */}
@@ -168,7 +169,7 @@ export default function UpdateProduct({ product, onSuccess, onCancel }: UpdatePr
               type="number"
               step="0.01"
               placeholder="0.00"
-              {...register("purchasePrice")}
+              {...register("purchasePrice", { valueAsNumber: true })}
               className="w-full px-4 py-3 bg-background-input border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl text-sm transition-all focus:outline-none text-foreground placeholder:text-slate-400"
             />
             {errors.purchasePrice && (
@@ -188,7 +189,7 @@ export default function UpdateProduct({ product, onSuccess, onCancel }: UpdatePr
               type="number"
               step="0.01"
               placeholder="0.00"
-              {...register("sellingPrice")}
+              {...register("sellingPrice", { valueAsNumber: true })}
               className="w-full px-4 py-3 bg-background-input border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl text-sm transition-all focus:outline-none text-foreground placeholder:text-slate-400"
             />
             {errors.sellingPrice && (
@@ -207,7 +208,7 @@ export default function UpdateProduct({ product, onSuccess, onCancel }: UpdatePr
             <input
               type="number"
               placeholder="0"
-              {...register("stockQuantity")}
+              {...register("stockQuantity", { valueAsNumber: true })}
               className="w-full px-4 py-3 bg-background-input border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl text-sm transition-all focus:outline-none text-foreground placeholder:text-slate-400"
             />
             {errors.stockQuantity && (
@@ -223,7 +224,6 @@ export default function UpdateProduct({ product, onSuccess, onCancel }: UpdatePr
             <Controller
               name="image"
               control={control}
-              defaultValue={product.image ? getAssetUrl(product.image) : undefined}
               render={({ field }) => (
                 <ImageUpload
                   label="Product Image (leave empty to keep current)"
