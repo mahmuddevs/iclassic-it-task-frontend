@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react"
 import { useAppSelector, useAppDispatch } from "../../store/store"
-import { useNavigate, Link } from "react-router"
+import { useNavigate } from "react-router"
 import { setUser } from "../../store/slices/auth-slice"
 import { getFetch } from "../../utils/getFetch"
 import { toast } from "sonner"
-import { HouseIcon, GearIcon, SignOutIcon } from "@phosphor-icons/react"
+import { SignOutIcon } from "@phosphor-icons/react"
 import ImageLoader from "./image-loader"
 
 export default function Avatar() {
@@ -81,25 +81,6 @@ export default function Avatar() {
             </p>
           </div>
 
-          <Link
-            to="/"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-secondary hover:bg-hover hover:text-primary transition-colors whitespace-nowrap"
-          >
-            <HouseIcon size={16} className="shrink-0" />
-            <span>Go to Site</span>
-          </Link>
-
-          <Link
-            to="/dashboard/profile-settings"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-secondary hover:bg-hover hover:text-primary transition-colors whitespace-nowrap"
-          >
-            <GearIcon size={16} className="shrink-0" />
-            <span>Profile Settings</span>
-          </Link>
-
-          <div className="h-px bg-border my-1" />
 
           <button
             onClick={handleLogout}

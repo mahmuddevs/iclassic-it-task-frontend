@@ -29,18 +29,22 @@ const router = createBrowserRouter([
               {
                 index: true,
                 element: <Home />,
+                handle: { title: "Dashboard" },
               },
               {
                 path: "products",
                 element: <Products />,
+                handle: { title: "Products" },
               },
               {
                 path: "create-sale",
                 element: <CreateSale />,
+                handle: { title: "Create Sale" },
               },
               {
                 path: "all-sales",
                 element: <AllSales />,
+                handle: { title: "Sales History" },
               },
               {
                 path: "settings",
@@ -49,10 +53,12 @@ const router = createBrowserRouter([
               {
                 path: "settings/manage-users",
                 element: <ManageUsers />,
+                handle: { title: "Manage Users" },
               },
               {
                 path: "settings/manage-permissions",
                 element: <ManagePermissions />,
+                handle: { title: "Manage Permissions" },
               },
             ],
           },
@@ -69,16 +75,19 @@ const router = createBrowserRouter([
           {
             path: "login",
             element: <Login />,
+            handle: { title: "Login" },
           },
           {
             path: "register",
             element: <Register />,
+            handle: { title: "Register" },
           },
         ],
       },
       {
         path: "*",
         element: <NotFound />,
+        handle: { title: "Page Not Found" },
       },
     ],
   },

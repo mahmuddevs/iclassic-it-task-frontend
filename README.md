@@ -1,77 +1,91 @@
-# React + TypeScript + Vite
+# 📦 iClassic IT - Inventory & Sales Management System (ERP)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![Live App](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=vercel)](iclassic-minierp.netlify.app)
 
-Currently, two official plugins are available:
+<!-- REPLACE THE LINK ABOVE WITH YOUR ACTUAL PRODUCTION DEPLOYMENT URL -->
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Welcome to the frontend repository of the **iClassic IT Inventory & Sales Management System**. This is a premium, real-time Enterprise Resource Planning (ERP) dashboard built for managing stocks, executing Point of Sale (POS) checkouts, and facilitating team communications.
 
-## React Compiler
+---
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## 🚀 Key Features
 
-Note: This will impact Vite dev & build performances.
+### 🛒 Real-time Point of Sale (POS) Checkout
 
-## Expanding the ESLint configuration
+- **Live Product Catalog**: Searchable product grid filtering dynamically by database categories, complete with low-stock warnings and out-of-stock lockouts.
+- **Interactive Checkout Cart**: Incremental quantity adjusters capped by database stock ceilings, live subtotal calculations, and balance-due change computing.
+- **Thermal Invoice Receipts**: Formats paper receipt layouts dynamically and calls the system print dialog in 1 click.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 💬 Global Workspace Chat
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **WebSocket Integration**: Fully responsive real-time chat utilizing `socket.io-client`.
+- **Stateful Session Fallback**: Authenticates socket connections using the Express app's dual-token authorization flow (relying on `refreshToken` verification if the short-lived access token is expired).
+- **Unread Message Notifications**: Compares user session records via local storage to display bouncy unread badge count circles over closed chat icons.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 👥 User Administration & Settings
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **Role Assignment Controls**: Modifies user credentials (e.g. Employee, Manager, Admin) and displays instant alerts on unchanged submissions.
+- **Granular Permission Checkpoints**: Private routes and buttons dynamically locked according to backend security claims.
 
+---
+
+## 🛠️ Technology Stack
+
+- **Core**: React 19 (compiled with the experimental React Compiler plugin for optimized re-render performance), TypeScript
+- **State Management**: Redux Toolkit (auth slices, theme tracking)
+- **Routing**: React Router v7 (utilizing `useMatches` hierarchy handlers for dynamic page title matching)
+- **Styling**: Tailwind CSS v4, Vanilla CSS
+- **Icons**: Phosphor Icons (React wrapper library)
+- **Queries**: TanStack React Query (server state synchronization)
+- **Toasts**: Sonner (minimalistic notifications engine)
+
+---
+
+## ⚙️ Environment Variables
+
+Create a `.env` file in the root of the `frontend/` directory and set the target backend URL:
+
+```env
+# URL pointing to the Node.js API / Socket.io server
+VITE_API_BACKEND_URL=http://localhost:3000
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 💻 Getting Started
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+To run the frontend project locally:
 
+### 1. Install Dependencies
+
+```bash
+# Using npm
+npm install
+
+# Or using bun
+bun install
 ```
+
+### 2. Launch Development Client
+
+```bash
+# Using npm
+npm run dev
+
+# Or using bun
+bun run dev
+```
+
+The application will launch and be accessible at [http://localhost:5173](http://localhost:5173).
+
+### 3. Compile Production Bundle
+
+```bash
+# Using npm
+npm run build
+
+# Or using bun
+bun run build
+```
+
+This runs the TypeScript check and triggers Vite's rollup builder to package static production assets into the `dist/` directory.
