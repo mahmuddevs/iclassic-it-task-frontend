@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useAppSelector } from "../../store/store"
+import { io, type Socket } from "socket.io-client"
+import { getFetch } from "../../utils/getFetch"
 import {
   ChatCircleDotsIcon,
   XIcon,
@@ -16,39 +18,119 @@ interface Message {
   timestamp: Date;
 }
 
+interface BackendMessage {
+  _id: string;
+  senderId: string;
+  senderName: string;
+  senderRole: string;
+  text: string;
+  createdAt: string;
+}
+
+interface SocketBroadcastMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  senderRole: string;
+  text: string;
+  createdAt: string;
+}
+
 export default function Chat() {
   const user = useAppSelector((state) => state.auth.user)
   const [isOpen, setIsOpen] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
   const [inputVal, setInputVal] = useState("")
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "m1",
-      sender: "other",
-      senderName: "Sarah Jenkins",
-      senderRole: "Sales Associate",
-      text: "Hi everyone, POS billing terminal 2 is up and running smoothly today.",
-      timestamp: new Date(Date.now() - 3600000 * 2),
-    },
-    {
-      id: "m2",
-      sender: "other",
-      senderName: "David Kim",
-      senderRole: "Inventory Manager",
-      text: "Just completed the stock restock counts. Low stock products list has been updated.",
-      timestamp: new Date(Date.now() - 3600000),
-    },
-    {
-      id: "m3",
-      sender: "other",
-      senderName: "John Doe",
-      senderRole: "Manager",
-      text: "Great job team! Please ensure all invoice receipts are printed correctly.",
-      timestamp: new Date(Date.now() - 1800000),
-    },
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
 
   const chatEndRef = useRef<HTMLDivElement>(null)
+  const socketRef = useRef<Socket | null>(null)
+  const isOpenRef = useRef(isOpen)
+
+  // Maintain isOpen value inside a ref to keep WebSocket listeners stable
+  useEffect(() => {
+    isOpenRef.current = isOpen
+  }, [isOpen])
+
+  // Fetch initial chat history
+  useEffect(() => {
+    if (!user) return
+
+    getFetch<{ data: BackendMessage[] }>("/chat/messages", { private: true })
+      .then((res) => {
+        if (res && res.data) {
+          const mapped: Message[] = res.data.map((msg: BackendMessage) => ({
+            id: msg._id,
+            sender: msg.senderId === user?._id ? "me" : "other",
+            senderName: msg.senderName,
+            senderRole: msg.senderRole,
+            text: msg.text,
+            timestamp: new Date(msg.createdAt),
+          }))
+          setMessages(mapped)
+
+          // Calculate unread count for messages arrived while offline
+          const lastRead = localStorage.getItem(`chat_last_read_${user?._id}`)
+          if (lastRead && !isOpenRef.current) {
+            const lastReadTime = new Date(lastRead).getTime()
+            const unread = mapped.filter((msg) =>
+              msg.sender === "other" && new Date(msg.timestamp).getTime() > lastReadTime
+            ).length
+            setUnreadCount(unread)
+          }
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load chat history", err)
+      })
+  }, [user])
+
+  // Configure Socket.io connection and real-time event listeners
+  useEffect(() => {
+    if (!user) {
+      if (socketRef.current) {
+        socketRef.current.disconnect()
+        socketRef.current = null
+      }
+      return
+    }
+
+    const socket = io(import.meta.env.VITE_API_BACKEND_URL as string, {
+      withCredentials: true,
+    })
+    socketRef.current = socket
+
+    socket.on("connect", () => {
+      console.log("Connected to Chat WebSocket server")
+    })
+
+    socket.on("new_message", (message: SocketBroadcastMessage) => {
+      setMessages((prev) => {
+        if (prev.some((m) => m.id === message.id)) return prev
+        return [
+          ...prev,
+          {
+            id: message.id,
+            sender: message.senderId === user?._id ? "me" : "other",
+            senderName: message.senderName,
+            senderRole: message.senderRole,
+            text: message.text,
+            timestamp: new Date(message.createdAt),
+          },
+        ]
+      })
+
+      // Increment badge count if panel is closed and message belongs to another user
+      if (!isOpenRef.current && message.senderId !== user?._id) {
+        setUnreadCount((count) => count + 1)
+      }
+    })
+
+    return () => {
+      socket.disconnect()
+      socketRef.current = null
+    }
+  }, [user])
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {
@@ -57,34 +139,25 @@ export default function Chat() {
     }
   }, [messages])
 
-  // Synchronous reset helper function
-  const resetUnreadCount = () => {
-    setUnreadCount(0)
-  }
-
-  // Clear unread count when chat is opened
+  // Update last read timestamp in localStorage when chat is open
   useEffect(() => {
-    const clearUnread = () => {
-      resetUnreadCount()
+    const updateLastRead = () => {
+      if (isOpen && user) {
+        localStorage.setItem(`chat_last_read_${user._id}`, new Date().toISOString())
+        setUnreadCount(0)
+      }
     }
-    if (isOpen) {
-      clearUnread()
-    }
-  }, [isOpen])
+    updateLastRead()
+  }, [isOpen, messages, user])
 
   const handleSend = (e: React.SubmitEvent) => {
     e.preventDefault()
     if (!inputVal.trim()) return
 
-    const userMessage: Message = {
-      id: `user-${Date.now()}`,
-      sender: "me",
-      text: inputVal.trim(),
-      timestamp: new Date(),
+    if (socketRef.current?.connected) {
+      socketRef.current.emit("send_message", { text: inputVal.trim() })
+      setInputVal("")
     }
-
-    setMessages((prev) => [...prev, userMessage])
-    setInputVal("")
   }
 
   // Generate initials for active user avatar
