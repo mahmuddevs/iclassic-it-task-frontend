@@ -78,3 +78,7 @@ a,
 button {
   @apply cursor-pointer;
 }
+
+label {
+  @apply inline-flex;
+}

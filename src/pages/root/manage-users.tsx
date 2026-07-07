@@ -241,7 +241,7 @@ export default function ManageUsers() {
       <Modal isOpen={isRoleModalOpen} onClose={() => !isUpdatingRole && setIsRoleModalOpen(false)} className="max-w-md overflow-visible!">
         <div className="flex flex-col flex-1 overflow-visible!">
           <Modal.Header title="Update User Role" onClose={() => !isUpdatingRole && setIsRoleModalOpen(false)} />
-          
+
           <Modal.Body className="space-y-4 overflow-visible!">
             {userToUpdateRole && (
               <div className="p-4 bg-background border border-border rounded-xl font-mono text-xs text-secondary space-y-1.5">
@@ -279,7 +279,6 @@ export default function ManageUsers() {
                 }
               }}
               disabled={isUpdatingRole}
-              className="border-primary!"
             >
               {isUpdatingRole ? "Updating..." : "Save Role"}
             </Button>
@@ -333,7 +332,7 @@ export default function ManageUsers() {
             <Button
               onClick={() => userToDelete && performDeleteUser(userToDelete._id)}
               disabled={isDeleting}
-              className="bg-red-600 hover:bg-red-700 border-red-600! text-white"
+              className="bg-red-600 hover:bg-red-700"
             >
               {isDeleting ? "Deleting..." : "Confirm Delete"}
             </Button>

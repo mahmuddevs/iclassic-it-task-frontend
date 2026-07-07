@@ -347,7 +347,7 @@ export default function AllSales() {
             <Button
               onClick={() => saleToDelete && performDeleteSale(saleToDelete._id)}
               disabled={isDeleting}
-              className="border-red-500! bg-red-500 hover:bg-red-600! text-white"
+              className="bg-red-500 hover:bg-red-600!"
             >
               {isDeleting ? "Deleting..." : "Confirm Delete"}
             </Button>

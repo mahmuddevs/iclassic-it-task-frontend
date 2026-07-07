@@ -29,33 +29,41 @@ export default function Button(props: ButtonProps) {
     href,
   } = props;
 
+  // Base layout, font, transitions, border-width shared between both variants
   const baseStyles =
-    "inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold transition-all duration-300 active:scale-[0.98] rounded-xl cursor-pointer select-none border";
+    "items-center justify-center gap-2 text-sm font-semibold transition-all duration-300 active:scale-[0.98] rounded-xl cursor-pointer select-none border";
 
   const displayStyle =
     className.includes("hidden") ||
-    className.includes("flex") ||
-    className.includes("block") ||
-    className.includes("grid")
+      className.includes("flex") ||
+      className.includes("block") ||
+      className.includes("grid")
       ? ""
       : "inline-flex";
 
+  // Exact height constraints
+  const hasCustomHeight = className.split(" ").some(c => c.startsWith("h-") || c.startsWith("py-") || c.startsWith("min-h-"));
+  const heightStyles = hasCustomHeight ? "" : "h-10 px-4";
+
+  // Override class detections
   const hasCustomBorder = className.split(" ").some(c => c.startsWith("border-") && c !== "border-none");
   const hasCustomText = className.split(" ").some(c => c.startsWith("text-"));
   const hasCustomBg = className.split(" ").some(c => c.startsWith("bg-"));
 
-  const primaryStyles = `text-white ${hasCustomBg ? "" : "bg-primary hover:bg-primary/90"} ${
-    hasCustomBorder ? "" : "border-transparent"
-  }`;
+  // Variant styles: Primary (solid background & matching crisp border color)
+  const primaryBg = hasCustomBg ? "" : "bg-primary hover:bg-primary/90";
+  const primaryBorder = hasCustomBorder ? "" : "border-0";
+  const primaryText = hasCustomText ? "" : "text-white";
+  const primaryStyles = `${primaryBg} ${primaryBorder} ${primaryText}`;
 
-  const secondaryStyles = `bg-transparent ${
-    hasCustomBorder ? "" : "border-border"
-  } ${
-    hasCustomText ? "" : "text-foreground"
-  } hover:bg-hover`;
+  // Variant styles: Secondary (transparent outline)
+  const secondaryBg = hasCustomBg ? "" : "bg-transparent hover:bg-hover";
+  const secondaryBorder = hasCustomBorder ? "" : "border-border";
+  const secondaryText = hasCustomText ? "" : "text-foreground";
+  const secondaryStyles = `${secondaryBg} ${secondaryBorder} ${secondaryText}`;
 
   const typeStyles = type === "primary" ? primaryStyles : secondaryStyles;
-  const combinedClasses = `${displayStyle} ${baseStyles} ${typeStyles} ${className}`.trim();
+  const combinedClasses = `${displayStyle} ${baseStyles} ${heightStyles} ${typeStyles} ${className}`.trim();
 
   if (href) {
     const linkProps = { ...props } as Record<string, unknown>;

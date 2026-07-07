@@ -319,7 +319,7 @@ export default function Products() {
           <Button
             type="primary"
             onClick={handleConfirmDelete}
-            className="bg-red-600 hover:bg-red-700 border-red-600!"
+            className="bg-red-600 hover:bg-red-700"
             disabled={isDeleting}
           >
             {isDeleting ? "Deleting..." : "Delete"}
