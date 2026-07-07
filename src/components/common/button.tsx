@@ -14,7 +14,7 @@ type ButtonAsButtonProps = ButtonBaseProps &
 
 type ButtonAsLinkProps = ButtonBaseProps &
   Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "type" | "href"> &
-  LinkProps & {
+  Omit<LinkProps, "to"> & {
     href: string;
     htmlType?: never;
   };

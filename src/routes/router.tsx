@@ -9,6 +9,9 @@ import AppInitializer from "../components/common/app-initializer";
 import ProtectedRoute from "../routes/protected-route";
 import CreateSale from "../pages/root/create-sale";
 import AllSales from "../pages/root/all-sales";
+import NotFound from "../pages/not-found";
+import ManageUsers from "../pages/root/manage-users";
+import ManagePermissions from "../pages/root/manage-permissions";
 
 const router = createBrowserRouter([
   {
@@ -41,7 +44,15 @@ const router = createBrowserRouter([
               },
               {
                 path: "settings",
-                element: <Products />,
+                element: <Navigate to="manage-users" replace />,
+              },
+              {
+                path: "settings/manage-users",
+                element: <ManageUsers />,
+              },
+              {
+                path: "settings/manage-permissions",
+                element: <ManagePermissions />,
               },
             ],
           },
@@ -64,6 +75,10 @@ const router = createBrowserRouter([
             element: <Register />,
           },
         ],
+      },
+      {
+        path: "*",
+        element: <NotFound />,
       },
     ],
   },

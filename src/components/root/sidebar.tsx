@@ -1,5 +1,6 @@
+import { useState, useEffect } from "react"
 import { Link, useLocation } from "react-router"
-import { HouseIcon, PackageIcon, ReceiptIcon, UsersIcon, GearIcon, ChartBarIcon, XIcon, PlusCircleIcon, ShoppingCartIcon } from "@phosphor-icons/react"
+import { HouseIcon, PackageIcon, ReceiptIcon, GearIcon, ChartBarIcon, XIcon, PlusCircleIcon, ShoppingCartIcon, CaretDownIcon, UsersIcon, KeyIcon } from "@phosphor-icons/react"
 import { useAppSelector } from "../../store/store"
 
 interface SidebarProps {
@@ -14,22 +15,29 @@ const ALL_MENU_ITEMS = [
   { name: "Create Sale", path: "/create-sale", icon: PlusCircleIcon, permission: "sales.create" },
   { name: "All Sales", path: "/all-sales", icon: ShoppingCartIcon, permission: "sales.read" },
   { name: "Orders", path: "/orders", icon: ReceiptIcon, permission: "orders.read" },
-  { name: "Customers", path: "/customers", icon: UsersIcon, permission: "users.read" },
   { name: "Reports", path: "/reports", icon: ChartBarIcon, permission: "reports.read" },
-  { name: "Settings", path: "/dashboard/profile-settings", icon: GearIcon, permission: null },
 ]
 
 export default function Sidebar({ isCollapsed, isMobileOpen, onCloseMobile }: SidebarProps) {
   const location = useLocation()
   const user = useAppSelector((state) => state.auth.user)
+  const [isSettingsOpen, setIsSettingsOpen] = useState(location.pathname.startsWith("/settings"))
 
   const userPermissionNames = user?.permissions?.map((p) => p.name) ?? []
 
   const menuItems = ALL_MENU_ITEMS.filter((item) => {
-    // Items with no required permission are always visible (Dashboard, Settings)
     if (!item.permission) return true
     return userPermissionNames.includes(item.permission)
   })
+
+  useEffect(() => {
+    const syncSettingsMenuState = () => {
+      if (location.pathname.startsWith("/settings")) {
+        setIsSettingsOpen(true)
+      }
+    }
+    syncSettingsMenuState()
+  }, [location.pathname])
 
   const isSidebarExpanded = !isCollapsed || isMobileOpen
 
@@ -93,6 +101,80 @@ export default function Sidebar({ isCollapsed, isMobileOpen, onCloseMobile }: Si
             </Link>
           )
         })}
+
+        {/* Settings Accordion Group */}
+        {(userPermissionNames.includes("users.read") || userPermissionNames.includes("permissions.read")) && (
+          <div>
+            <button
+              type="button"
+              onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+              className={`flex items-center w-full rounded-xl transition-all select-none py-3 cursor-pointer border-none bg-transparent ${
+                isSidebarExpanded
+                  ? "gap-3 px-3.5 justify-between"
+                  : "justify-center px-0"
+              } ${
+                location.pathname.startsWith("/settings")
+                  ? "bg-primary/10 text-primary font-semibold"
+                  : "text-secondary hover:text-foreground hover:bg-hover"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <GearIcon size={22} className="shrink-0" />
+                {isSidebarExpanded && (
+                  <span className="text-sm tracking-wide whitespace-nowrap">
+                    Settings
+                  </span>
+                )}
+              </div>
+              {isSidebarExpanded && (
+                <CaretDownIcon
+                  size={14}
+                  className={`transition-transform duration-300 shrink-0 ${isSettingsOpen ? "rotate-180" : ""}`}
+                />
+              )}
+            </button>
+
+            {/* Collapsible Submenu Accordion */}
+            <div
+              className="transition-all duration-300 ease-in-out overflow-hidden space-y-1"
+              style={{
+                maxHeight: isSettingsOpen && isSidebarExpanded ? "100px" : "0px",
+                opacity: isSettingsOpen && isSidebarExpanded ? 1 : 0,
+                paddingLeft: isSidebarExpanded ? "2.5rem" : "0",
+                marginTop: isSettingsOpen && isSidebarExpanded ? "0.25rem" : "0",
+              }}
+            >
+              {userPermissionNames.includes("users.read") && (
+                <Link
+                  to="/settings/manage-users"
+                  onClick={onCloseMobile}
+                  className={`flex items-center gap-2.5 rounded-lg py-2 px-3 text-xs font-semibold transition-all select-none ${
+                    location.pathname === "/settings/manage-users"
+                      ? "bg-primary/20 text-primary"
+                      : "text-secondary hover:text-foreground hover:bg-hover"
+                  }`}
+                >
+                  <UsersIcon size={16} className="shrink-0" />
+                  <span>Manage Users</span>
+                </Link>
+              )}
+              {userPermissionNames.includes("permissions.read") && (
+                <Link
+                  to="/settings/manage-permissions"
+                  onClick={onCloseMobile}
+                  className={`flex items-center gap-2.5 rounded-lg py-2 px-3 text-xs font-semibold transition-all select-none ${
+                    location.pathname === "/settings/manage-permissions"
+                      ? "bg-primary/20 text-primary"
+                      : "text-secondary hover:text-foreground hover:bg-hover"
+                  }`}
+                >
+                  <KeyIcon size={16} className="shrink-0" />
+                  <span>Manage Permissions</span>
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
       </nav>
     </aside>
   )

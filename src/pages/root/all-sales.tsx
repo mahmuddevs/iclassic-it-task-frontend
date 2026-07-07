@@ -302,23 +302,34 @@ export default function AllSales() {
           <Modal.Header title="Delete Sale" onClose={() => !isDeleting && setIsDeleteModalOpen(false)} />
 
           <Modal.Body className="space-y-4">
-            <p className="text-foreground font-medium text-sm">
+            <p className="text-foreground font-semibold text-sm">
               Are you sure you want to delete this sale transaction?
             </p>
             {saleToDelete && (
-              <div className="p-4 bg-slate-50 dark:bg-slate-900/40 border border-border rounded-xl font-mono text-xs text-secondary space-y-1.5">
-                <div>Invoice ID: {saleToDelete.invoiceId}</div>
-                <div>Grand Total: ${saleToDelete.grandTotal.toFixed(2)}</div>
-                <div>Date: {new Date(saleToDelete.createdAt).toLocaleString()}</div>
+              <div className="p-4 bg-background border border-border rounded-xl font-mono text-xs text-secondary space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary font-medium">Invoice ID:</span>
+                  <span className="text-foreground font-bold">{saleToDelete.invoiceId}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary font-medium">Grand Total:</span>
+                  <span className="text-red-500 font-extrabold">${saleToDelete.grandTotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center border-t border-border pt-2 mt-1">
+                  <span className="text-secondary font-medium">Date:</span>
+                  <span className="text-foreground font-semibold">
+                    {new Date(saleToDelete.createdAt).toLocaleString()}
+                  </span>
+                </div>
               </div>
             )}
 
-            <label className="flex items-start gap-3 p-3.5 border border-border rounded-xl bg-slate-50/50 dark:bg-slate-900/20 cursor-pointer select-none hover:bg-hover transition-colors">
+            <label className="flex items-start gap-3 p-3.5 border border-border rounded-xl bg-background cursor-pointer select-none hover:bg-hover transition-colors">
               <input
                 type="checkbox"
                 checked={shouldRestoreStock}
                 onChange={(e) => setShouldRestoreStock(e.target.checked)}
-                className="mt-0.5 w-4 h-4 rounded border-border text-primary focus:ring-primary accent-primary cursor-pointer"
+                className="mt-1 w-4 h-4 rounded border-border text-primary focus:ring-primary accent-primary cursor-pointer"
               />
               <div className="space-y-0.5">
                 <span className="text-sm font-semibold text-foreground">Restore Product Stock</span>

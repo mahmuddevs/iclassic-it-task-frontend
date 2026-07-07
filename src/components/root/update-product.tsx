@@ -34,7 +34,7 @@ export default function UpdateProduct({ product, onSuccess, onCancel }: UpdatePr
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
     resolver: zodResolver(UpdateProductSchema),
     defaultValues: {
@@ -67,6 +67,10 @@ export default function UpdateProduct({ product, onSuccess, onCancel }: UpdatePr
   })
 
   const onSubmit: SubmitHandler<UpdateProductInput> = (values) => {
+    if (!isDirty) {
+      toast.error("No changes detected. The product details are already up-to-date.")
+      return
+    }
     const formData = new FormData()
     formData.append("name", values.name)
     formData.append("sku", values.sku)

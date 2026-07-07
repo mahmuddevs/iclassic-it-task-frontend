@@ -16,6 +16,7 @@ import AddProduct from "../../components/root/add-product"
 import TableSkeleton from "../../components/common/table-skeleton"
 import UpdateProduct from "../../components/root/update-product"
 import ViewProduct from "../../components/root/view-product"
+import { useAppSelector } from "../../store/store"
 import Search from "../../components/common/search"
 
 interface ProductItem {
@@ -40,6 +41,10 @@ interface GetProductsResponse {
 }
 
 export default function Products() {
+  const user = useAppSelector((state) => state.auth.user)
+  const userPermissionNames = user?.permissions?.map((p) => p.name) ?? []
+  const canCreateProduct = userPermissionNames.includes("products.create")
+
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1))
   const [search] = useQueryState("search")
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -120,9 +125,11 @@ export default function Products() {
     <div className="space-y-6">
       <div className="flex flex-wrap justify-between items-center gap-4">
         <PageHeading />
-        <Button onClick={() => setIsAddModalOpen(true)} className="border-primary!">
-          Add Product
-        </Button>
+        {canCreateProduct && (
+          <Button onClick={() => setIsAddModalOpen(true)} className="border-primary!">
+            Add Product
+          </Button>
+        )}
       </div>
       {/* Search */}
       <div className="flex justify-end">
