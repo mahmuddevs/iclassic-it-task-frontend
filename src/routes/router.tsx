@@ -7,6 +7,8 @@ import Login from "../pages/auth/login";
 import Register from "../pages/auth/register";
 import AppInitializer from "../components/common/app-initializer";
 import ProtectedRoute from "../routes/protected-route";
+import CreateSale from "../pages/root/create-sale";
+import AllSales from "../pages/root/all-sales";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,18 @@ const router = createBrowserRouter([
               },
               {
                 path: "products",
+                element: <Products />,
+              },
+              {
+                path: "create-sale",
+                element: <CreateSale />,
+              },
+              {
+                path: "all-sales",
+                element: <AllSales />,
+              },
+              {
+                path: "settings",
                 element: <Products />,
               },
             ],

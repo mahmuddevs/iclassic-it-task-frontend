@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router"
-import { HouseIcon, PackageIcon, ReceiptIcon, UsersIcon, GearIcon, ChartBarIcon, XIcon } from "@phosphor-icons/react"
+import { HouseIcon, PackageIcon, ReceiptIcon, UsersIcon, GearIcon, ChartBarIcon, XIcon, PlusCircleIcon, ShoppingCartIcon } from "@phosphor-icons/react"
 import { useAppSelector } from "../../store/store"
 
 interface SidebarProps {
@@ -11,6 +11,8 @@ interface SidebarProps {
 const ALL_MENU_ITEMS = [
   { name: "Dashboard", path: "/", icon: HouseIcon, permission: null },
   { name: "Products", path: "/products", icon: PackageIcon, permission: "products.read" },
+  { name: "Create Sale", path: "/create-sale", icon: PlusCircleIcon, permission: "sales.create" },
+  { name: "All Sales", path: "/all-sales", icon: ShoppingCartIcon, permission: "sales.read" },
   { name: "Orders", path: "/orders", icon: ReceiptIcon, permission: "orders.read" },
   { name: "Customers", path: "/customers", icon: UsersIcon, permission: "users.read" },
   { name: "Reports", path: "/reports", icon: ChartBarIcon, permission: "reports.read" },
