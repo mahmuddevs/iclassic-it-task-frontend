@@ -116,9 +116,23 @@ export default function ManagePermissions() {
     return option.permNames.every((name) => selectedPerms.includes(name))
   }
 
+  const hasChanges = (() => {
+    if (!roles) return false
+    const activeRoleData = roles.find((r) => r.name === selectedRole)
+    if (!activeRoleData) return false
+    const originalPerms = activeRoleData.permissions.map((p) => p.name)
+
+    if (selectedPerms.length !== originalPerms.length) return true
+    return !selectedPerms.every((p) => originalPerms.includes(p))
+  })()
+
   const handleSave = () => {
     if (!canUpdate) {
       toast.error("Not authorized. You do not have permission to update role permissions.")
+      return
+    }
+    if (!hasChanges) {
+      toast.info("No changes were made to permissions.")
       return
     }
     savePermissions({ roleName: selectedRole, permissionNames: selectedPerms })
@@ -138,7 +152,7 @@ export default function ManagePermissions() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="@container space-y-6">
       <div className="flex flex-wrap justify-between items-center gap-4">
         <PageHeading />
       </div>
@@ -158,10 +172,10 @@ export default function ManagePermissions() {
       {isLoading ? (
         <TableSkeleton />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 @3xl:grid-cols-3 gap-6 items-start">
           {/* Left Column - Role Selectors */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold text-secondary uppercase tracking-wider pl-1">Security Roles</h3>
+            <h3 className="text-xs font-bold text-secondary uppercase tracking-wider ps-1">Security Roles</h3>
             <button
               onClick={() => setSelectedRole("Manager")}
               className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer select-none bg-background-card ${selectedRole === "Manager"
@@ -170,7 +184,7 @@ export default function ManagePermissions() {
                 }`}
             >
               <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${selectedRole === "Manager" ? "bg-primary/10 text-primary" : "bg-slate-100 dark:bg-slate-900/50 text-secondary"}`}>
+                <div className={`p-2 rounded-lg ${selectedRole === "Manager" ? "bg-primary/10 text-primary" : "bg-background text-secondary"}`}>
                   <ShieldCheckIcon size={20} />
                 </div>
                 <div>
@@ -188,7 +202,7 @@ export default function ManagePermissions() {
                 }`}
             >
               <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${selectedRole === "Employee" ? "bg-primary/10 text-primary" : "bg-slate-100 dark:bg-slate-900/50 text-secondary"}`}>
+                <div className={`p-2 rounded-lg ${selectedRole === "Employee" ? "bg-primary/10 text-primary" : "bg-background text-secondary"}`}>
                   <ShieldCheckIcon size={20} />
                 </div>
                 <div>
@@ -201,22 +215,17 @@ export default function ManagePermissions() {
 
           {/* Right Column - Module Permission Cards */}
           <div className="md:col-span-2 space-y-6">
-            <div className="flex justify-between items-center px-1">
+            <div className="flex justify-between items-center gap-3 flex-wrap px-1">
               <h3 className="text-xs font-bold text-secondary uppercase tracking-wider">
                 Module Access Rights ({selectedRole})
               </h3>
-              {canUpdate && (
-                <Button onClick={handleSave} disabled={isSaving} className="border-primary!">
-                  {isSaving ? "Saving..." : "Save Changes"}
-                </Button>
-              )}
             </div>
 
             <div className="space-y-4">
               {enabledModules.map((module) => {
                 const options = getVirtualOptionsForModule(module)
                 return (
-                  <div key={module} className="bg-background-card border border-border rounded-2xl p-5 shadow-sm space-y-4">
+                  <div key={module} className="@container bg-background-card border border-border rounded-2xl p-5 shadow-sm space-y-4">
                     <div>
                       <h4 className="font-bold text-foreground capitalize text-sm">{module} Permissions</h4>
                       <p className="text-xs text-secondary mt-0.5">{moduleDisplayNames[module]}</p>
@@ -224,7 +233,7 @@ export default function ManagePermissions() {
 
                     <hr className="border-border/60" />
 
-                    <div className="grid grid-cols-2 xs:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 @lg:grid-cols-3 gap-4">
                       {options.map((opt) => {
                         const isChecked = isOptionChecked(opt)
                         return (
@@ -251,6 +260,14 @@ export default function ManagePermissions() {
                 )
               })}
             </div>
+
+            {canUpdate && (
+              <div className="flex justify-end pt-2">
+                <Button onClick={handleSave} disabled={isSaving} className="border-primary! px-6 py-2.5 h-11 text-xs font-bold">
+                  {isSaving ? "Saving..." : "Save Changes"}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}

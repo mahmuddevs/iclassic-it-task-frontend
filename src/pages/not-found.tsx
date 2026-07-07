@@ -5,8 +5,8 @@ export default function NotFound() {
     <div className="min-h-dvh flex items-center justify-center bg-background px-4">
       {/* Decorative background glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 inset-s-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 inset-e-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-md w-full bg-background-card border border-border p-8 md:p-10 rounded-2xl shadow-xl flex flex-col items-center text-center backdrop-blur-md">

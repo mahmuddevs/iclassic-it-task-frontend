@@ -79,14 +79,14 @@ export default function Login() {
           <div>
             <label className="block text-xs font-semibold text-secondary uppercase tracking-wider mb-2">Email Address</label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-secondary">
+              <div className="absolute inset-y-0 inset-s-0 ps-4 flex items-center pointer-events-none text-secondary">
                 <EnvelopeSimpleIcon size={20} />
               </div>
               <input
                 type="email"
                 placeholder="name@company.com"
                 {...register("email")}
-                className="w-full pl-11 pr-4 py-3 bg-background-input border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl text-sm transition-all focus:outline-none text-foreground placeholder:text-slate-400"
+                className="w-full ps-11 pe-4 py-3 bg-background-input border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl text-sm transition-all focus:outline-none text-foreground placeholder:text-slate-400"
               />
             </div>
             {errors.email && (
@@ -103,19 +103,19 @@ export default function Login() {
               <label className="block text-xs font-semibold text-secondary uppercase tracking-wider">Password</label>
             </div>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-secondary">
+              <div className="absolute inset-y-0 inset-s-0 ps-4 flex items-center pointer-events-none text-secondary">
                 <LockSimpleIcon size={20} />
               </div>
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 {...register("password")}
-                className="w-full pl-11 pr-12 py-3 bg-background-input border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl text-sm transition-all focus:outline-none text-foreground placeholder:text-slate-400"
+                className="w-full ps-11 pe-12 py-3 bg-background-input border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl text-sm transition-all focus:outline-none text-foreground placeholder:text-slate-400"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-4 flex items-center text-secondary hover:text-primary transition-colors"
+                className="absolute inset-y-0 inset-e-0 pe-4 flex items-center text-secondary hover:text-primary transition-colors"
               >
                 {showPassword ? <EyeSlashIcon size={20} /> : <EyeIcon size={20} />}
               </button>

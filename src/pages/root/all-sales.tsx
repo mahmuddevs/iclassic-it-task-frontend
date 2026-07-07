@@ -276,7 +276,7 @@ export default function AllSales() {
                     <span className="font-bold text-green-600">${saleToView.paidAmount.toFixed(2)}</span>
                   </div>
                 </div>
-                <div className="space-y-2 border-l border-border pl-4">
+                <div className="space-y-2 border-l border-border ps-4">
                   <div className="flex justify-between text-sm">
                     <span className="text-secondary">Due Amount:</span>
                     <span className="font-bold text-red-500">${saleToView.dueAmount.toFixed(2)}</span>

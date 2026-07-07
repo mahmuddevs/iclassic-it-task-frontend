@@ -191,7 +191,7 @@ export default function Products() {
                   <Table.Cell className="text-right font-semibold">
                     <span
                       className={
-                        product.stockQuantity < 10
+                        product.stockQuantity <= 5
                           ? "text-red-500 font-bold animate-pulse"
                           : "text-foreground"
                       }

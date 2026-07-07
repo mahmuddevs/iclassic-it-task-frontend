@@ -76,11 +76,10 @@ export default function ImageUpload({
 
       <div
         onClick={triggerUpload}
-        className={`relative flex flex-col items-center justify-center w-full h-48 rounded-lg border border-dashed transition-all cursor-pointer overflow-hidden mt-auto ${
-          previewUrl
+        className={`relative flex flex-col items-center justify-center w-full h-48 rounded-lg border border-dashed transition-all cursor-pointer overflow-hidden mt-auto ${previewUrl
             ? "border-border bg-background-card hover:bg-hover"
             : "border-border bg-background-input hover:border-primary hover:bg-primary/5"
-        } ${errorMessage ? "border-red-500" : ""}`}
+          } ${errorMessage ? "border-red-500" : ""}`}
       >
         <input
           type="file"
@@ -105,7 +104,7 @@ export default function ImageUpload({
             <button
               type="button"
               onClick={handleClear}
-              className="absolute top-2 right-2 flex items-center justify-center w-6 h-6 rounded-md bg-background-card/90 hover:bg-background-card text-red-500 shadow-sm transition-colors border border-border"
+              className="absolute top-2 inset-e-2 flex items-center justify-center w-6 h-6 rounded-md bg-background-card/90 hover:bg-background-card text-red-500 shadow-sm transition-colors border border-border"
               title="Remove image"
             >
               <Trash size={14} weight="bold" />

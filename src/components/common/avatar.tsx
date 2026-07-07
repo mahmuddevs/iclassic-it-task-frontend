@@ -70,7 +70,7 @@ export default function Avatar() {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 min-w-48 w-max bg-background-card border border-border rounded-lg shadow-lg py-1 z-30 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="absolute inset-e-0 mt-2 min-w-48 w-max bg-background-card border border-border rounded-lg shadow-lg py-1 z-30 animate-in fade-in slide-in-from-top-2 duration-200">
           {/* User Details Header */}
           <div className="px-4 py-2 border-b border-border mb-1 select-none">
             <p className="text-sm font-bold text-foreground">

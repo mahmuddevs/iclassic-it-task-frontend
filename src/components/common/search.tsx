@@ -67,7 +67,7 @@ export default function Search({
 
   return (
     <div className={`relative w-full max-w-sm ${className}`}>
-      <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-secondary">
+      <span className="absolute inset-y-0 inset-s-0 flex items-center ps-3.5 pointer-events-none text-secondary">
         <MagnifyingGlassIcon size={18} />
       </span>
       <input
@@ -75,13 +75,13 @@ export default function Search({
         value={inputValue}
         onChange={handleChange}
         placeholder={placeholder}
-        className="w-full bg-background-input border border-border pl-10 pr-10 h-12 text-sm rounded-xl outline-none transition-all text-foreground hover:border-slate-400 dark:hover:border-slate-600 focus:border-primary focus:ring-1 focus:ring-primary"
+        className="w-full bg-background-input border border-border ps-10 pe-10 h-12 text-sm rounded-xl outline-none transition-all text-foreground hover:border-slate-400 dark:hover:border-slate-600 focus:border-primary focus:ring-1 focus:ring-primary"
       />
       {inputValue && (
         <button
           type="button"
           onClick={handleClear}
-          className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-secondary hover:text-foreground cursor-pointer border-none bg-transparent"
+          className="absolute inset-y-0 inset-e-0 flex items-center pe-3.5 text-secondary hover:text-foreground cursor-pointer border-none bg-transparent"
         >
           <XIcon size={16} />
         </button>

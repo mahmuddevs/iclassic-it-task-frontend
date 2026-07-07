@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Outlet } from "react-router"
 import Header from "../components/root/header"
 import Sidebar from "../components/root/sidebar"
+import Chat from "../components/common/chat"
 
 export default function RootLayout() {
   const [isCollapsed, setIsCollapsed] = useState(false)
@@ -35,6 +36,9 @@ export default function RootLayout() {
           <Outlet />
         </main>
       </div>
+
+      {/* Global Interactive Chat Widget */}
+      <Chat />
     </div>
   )
 }
